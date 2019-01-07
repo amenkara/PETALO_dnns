@@ -15,6 +15,10 @@ from   invisible_cities.io.mcinfo_io      import units_dict
 from   typing                             import Mapping
 
 
+COMPTON = 1
+PHOTOELECTRIC = 0
+
+
 def get_evt_energy(table):
     """Returns dictionary containing the energy of each event """
     
@@ -67,12 +71,11 @@ def iscompton(event, event_energy):
 
 def labeling(event, energy):
     if iscompton(event, energy) == True:
-        return "Compton"
+        return COMPTON
     elif isphoto(event, energy) == True:
-        return "Photo"
+        return PHOTOELECTRIC
     else:
         return "None"
-
 
 
 def make_2d_image (waveforms, pos_dict, dimension_x=30, dimension_y=30, min_len=10):
@@ -109,3 +112,28 @@ def make_2d_image (waveforms, pos_dict, dimension_x=30, dimension_y=30, min_len=
             
     return myimage
 
+def get_images_with_labels(mcinfo, en_dict, waveforms, pos_dict):
+    
+    image_array = []
+    label_array = []
+    event_number_array = []
+    
+    for keys in mcinfo.keys():
+        
+        if labeling(mcinfo[keys], en_dict[keys]) is not "None":
+            image = make_2d_image(waveforms[keys], pos_dict)
+            label = labeling(mcinfo[keys], en_dict[keys])
+            event_number   = np.array(keys)
+            
+            normalized_image = np.array(image/image.sum())
+            
+            label_array.append(label)
+            image_array.append(normalized_image)
+            event_number_array.append(event_number)
+      
+    label_array = np.array(label_array)
+    image_array = np.array(image_array)
+    image_array = np.reshape (image_array, (image_array.shape[0], image_array.shape[1], image_array.shape[2],1))
+    event_number_array = np.array(event_number_array)
+                                  
+    return label_array, image_array, event_number_array
