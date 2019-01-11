@@ -75,7 +75,7 @@ def iscompton(event, event_energy):
     else:
         return False
 
-    def labeling(event, energy):
+def labeling(event, energy):
     if iscompton(event, energy) == True:
         return COMPTON
     elif isphoto(event, energy) == True:
@@ -83,7 +83,7 @@ def iscompton(event, event_energy):
     else:
         return "None"
 
-    def make_2d_image (waveforms, pos_dict, dimension_x=30, dimension_y=30, min_len=10):
+def make_2d_image (waveforms, pos_dict, dimension_x=30, dimension_y=30, min_len=10):
 
     pos_and_char_of_sipm = []
 

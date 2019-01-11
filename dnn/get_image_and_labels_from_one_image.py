@@ -1,4 +1,4 @@
-import classification_functions as classif
+import classification_and_labeling_functions as classif
 import os
 import numpy                   as np
 import tables                  as tb
@@ -6,10 +6,11 @@ from   invisible_cities.io                import mcinfo_io
 from   antea.io                           import mc_io
 
 
-dirname='/home/adriana/Petalo_dnn/data/'
+dirname='/home/DATA/PETALO/pitch4mm/'
 
 files = os.listdir(dirname)
 input_file= dirname + files[0]
+print('The input file is', input_file)
 
 mytable = tb.open_file(input_file,mode='r')
 
@@ -25,5 +26,5 @@ print('----------------getting images with labels------------------')
 labels, images, events = classif.get_images_with_labels(mcinfo, en_dict, waveforms, pos_dict)
 
 print('-------------- saving ------------')
-training_set_test="training_set_test_7_january.npz"
+training_set_test="training_set_test_pitch4mm_file0.npz"
 np.savez_compressed(training_set_test, labels=labels, images=images, event_number= events)
